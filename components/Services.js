@@ -39,7 +39,7 @@ const Services = () => {
           fontSize: 20,
           fontWeight: '600',
           paddingHorizontal: 10,
-          marginTop: 10,
+          marginTop: 8,
           marginBottom: 7,
         }}
       >
