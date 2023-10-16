@@ -16,8 +16,11 @@ import { Feather } from '@expo/vector-icons';
 import Carousel from '../components/Carousel';
 import Services from '../components/Services';
 import DressItem from '../components/DressItem';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
+  const cart = useSelector((state) => state.cart.cart);
+  console.log(cart);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
     'We are Loading Your Location'
   );
@@ -139,7 +142,7 @@ const HomeScreen = () => {
   ];
 
   return (
-    <ScrollView style={{ backgroundColor: '#F0F0F0', flex: 1 }}>
+    <ScrollView style={{ backgroundColor: '#F0F0F0', flex: 1, marginTop: 35 }}>
       {/* Location and Profile  */}
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
         <MaterialIcons name="location-on" size={30} color="#fd5c63" />
