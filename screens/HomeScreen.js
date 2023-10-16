@@ -6,10 +6,12 @@ import {
   Alert,
   Pressable,
   Image,
+  TextInput,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 const HomeScreen = () => {
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
@@ -82,6 +84,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ marginTop: 30 }}>
+      {/* Location and Profile  */}
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
         <MaterialIcons name="location-on" size={30} color="#fd5c63" />
         <View>
@@ -98,6 +101,23 @@ const HomeScreen = () => {
             }}
           />
         </Pressable>
+      </View>
+
+      {/* Search Bar  */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: 8,
+          margin: 10,
+          borderWidth: 0.8,
+          borderColor: '#C0C0C0',
+          borderRadius: 7,
+        }}
+      >
+        <TextInput placeholder="Search For Items" />
+        <Feather name="search" size={24} color="#fd5c63" />
       </View>
     </SafeAreaView>
   );
