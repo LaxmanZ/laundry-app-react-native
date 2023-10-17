@@ -1,8 +1,6 @@
 import {
-  StyleSheet,
   Text,
   View,
-  SafeAreaView,
   Alert,
   Pressable,
   Image,
@@ -22,6 +20,9 @@ import { getProducts } from '../ProductReducer';
 const HomeScreen = () => {
   const cart = useSelector((state) => state.cart.cart);
   // console.log(cart);
+  const total = cart
+    .map((item) => item.quantity * item.price)
+    .reduce((curr, prev) => curr + prev, 0);
 
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
     'We are Loading Your Location'
@@ -157,67 +158,110 @@ const HomeScreen = () => {
   ];
 
   return (
-    <ScrollView style={{ backgroundColor: '#F0F0F0', flex: 1, marginTop: 35 }}>
-      {/* Location and Profile  */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
-        <MaterialIcons name="location-on" size={30} color="#fd5c63" />
-        <View>
-          <Text style={{ fontSize: 16, fontWeight: '600' }}>Home</Text>
-          <Text>{displayCurrentAddress}</Text>
+    <>
+      <ScrollView
+        style={{ backgroundColor: '#F0F0F0', flex: 1, marginTop: 35 }}
+      >
+        {/* Location and Profile  */}
+        <View
+          style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}
+        >
+          <MaterialIcons name="location-on" size={30} color="#fd5c63" />
+          <View>
+            <Text style={{ fontSize: 16, fontWeight: '600' }}>Home</Text>
+            <Text>{displayCurrentAddress}</Text>
+          </View>
+
+          <Pressable style={{ marginLeft: 'auto', marginRight: 8 }}>
+            <Image
+              style={{ width: 40, height: 40, borderRadius: 20 }}
+              resizeMode="contain"
+              source={{
+                uri: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/8d093e1a-2a6e-4be7-906d-bf94a43b4b41/df9vv8k-9886f892-c6fa-4381-851c-f08f90c024f8.jpg/v1/fill/w_894,h_894,q_70,strp/zoro_profile_pic_by_allsundayjelly_df9vv8k-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI1MiIsInBhdGgiOiJcL2ZcLzhkMDkzZTFhLTJhNmUtNGJlNy05MDZkLWJmOTRhNDNiNGI0MVwvZGY5dnY4ay05ODg2Zjg5Mi1jNmZhLTQzODEtODUxYy1mMDhmOTBjMDI0ZjguanBnIiwid2lkdGgiOiI8PTEyNTIifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.-QNsH87cAORlO_3LUV0XT32pyp5zMWT4ZgTeoLt_qnk',
+              }}
+            />
+          </Pressable>
         </View>
 
-        <Pressable style={{ marginLeft: 'auto', marginRight: 8 }}>
-          <Image
-            style={{ width: 40, height: 40, borderRadius: 20 }}
-            resizeMode="contain"
-            source={{
-              uri: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/8d093e1a-2a6e-4be7-906d-bf94a43b4b41/df9vv8k-9886f892-c6fa-4381-851c-f08f90c024f8.jpg/v1/fill/w_894,h_894,q_70,strp/zoro_profile_pic_by_allsundayjelly_df9vv8k-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI1MiIsInBhdGgiOiJcL2ZcLzhkMDkzZTFhLTJhNmUtNGJlNy05MDZkLWJmOTRhNDNiNGI0MVwvZGY5dnY4ay05ODg2Zjg5Mi1jNmZhLTQzODEtODUxYy1mMDhmOTBjMDI0ZjguanBnIiwid2lkdGgiOiI8PTEyNTIifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.-QNsH87cAORlO_3LUV0XT32pyp5zMWT4ZgTeoLt_qnk',
-            }}
-          />
-        </Pressable>
-      </View>
-
-      {/* Search Bar  */}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: 8,
-          margin: 10,
-          borderWidth: 0.8,
-          borderColor: '#C0C0C0',
-          borderRadius: 7,
-        }}
-      >
-        <TextInput placeholder="Search For Items" />
-        <Feather name="search" size={24} color="#fd5c63" />
-      </View>
-
-      {/* Image Carousel  */}
-      <Carousel />
-
-      {/* Services  */}
-      <Services />
-
-      {/* Rendering All The Products   */}
-      <View>
-        <Text
+        {/* Search Bar  */}
+        <View
           style={{
-            fontSize: 20,
-            fontWeight: '600',
-            paddingHorizontal: 10,
-            marginBottom: 7,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 8,
+            margin: 10,
+            borderWidth: 0.8,
+            borderColor: '#C0C0C0',
+            borderRadius: 7,
           }}
         >
-          Products Available
-        </Text>
+          <TextInput placeholder="Search For Items" />
+          <Feather name="search" size={24} color="#fd5c63" />
+        </View>
 
-        {product.map((item, index) => (
-          <DressItem item={item} key={index} />
-        ))}
-      </View>
-    </ScrollView>
+        {/* Image Carousel  */}
+        <Carousel />
+
+        {/* Services  */}
+        <Services />
+
+        {/* Rendering All The Products   */}
+        <View>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: '600',
+              paddingHorizontal: 10,
+              marginBottom: 7,
+            }}
+          >
+            Products Available
+          </Text>
+
+          {product.map((item, index) => (
+            <DressItem item={item} key={index} />
+          ))}
+        </View>
+      </ScrollView>
+
+      {total === 0 ? null : (
+        <Pressable
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: '#088f8f',
+            padding: 10,
+            // marginBottom: 10,
+            margin: 15,
+            borderRadius: 7,
+          }}
+        >
+          <View>
+            <Text style={{ fontSize: 17, fontWeight: '600', color: 'white' }}>
+              {cart.length} items | total $ {total}
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: '400',
+                color: 'white',
+                marginVertical: 6,
+              }}
+            >
+              Extra charges might Apply
+            </Text>
+          </View>
+
+          <Pressable>
+            <Text style={{ fontSize: 17, fontWeight: '600', color: 'white' }}>
+              Proceed To Pickup
+            </Text>
+          </Pressable>
+        </Pressable>
+      )}
+    </>
   );
 };
 
