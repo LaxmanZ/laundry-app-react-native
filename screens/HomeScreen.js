@@ -16,11 +16,13 @@ import { Feather } from '@expo/vector-icons';
 import Carousel from '../components/Carousel';
 import Services from '../components/Services';
 import DressItem from '../components/DressItem';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProducts } from '../ProductReducer';
 
 const HomeScreen = () => {
   const cart = useSelector((state) => state.cart.cart);
-  console.log(cart);
+  // console.log(cart);
+
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
     'We are Loading Your Location'
   );
@@ -88,6 +90,19 @@ const HomeScreen = () => {
       }
     }
   };
+
+  const product = useSelector((state) => state.product.product);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (product.length > 0) return;
+
+    const fetchProducts = () => {
+      services.map((service) => dispatch(getProducts(service)));
+    };
+    fetchProducts();
+  }, []);
+  // console.log(product);
 
   const services = [
     {
@@ -198,7 +213,7 @@ const HomeScreen = () => {
           Products Available
         </Text>
 
-        {services.map((item, index) => (
+        {product.map((item, index) => (
           <DressItem item={item} key={index} />
         ))}
       </View>
