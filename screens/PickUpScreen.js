@@ -92,7 +92,11 @@ const PickUpScreen = () => {
     }
 
     if (selectedDate && selectedTime && dalevary) {
-      navigation.replace('Cart');
+      navigation.replace('Cart', {
+        pickUpDate: selectedDate,
+        selectedTime: selectedTime,
+        no_Of_days: dalevary,
+      });
     }
   };
 
@@ -112,7 +116,7 @@ const PickUpScreen = () => {
           >
             Enter Address
           </Text>
-          <Pressable onPress={() => navigation.navigate('Home')}>
+          <Pressable onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={28} color="#fd5c63" />
           </Pressable>
         </View>
