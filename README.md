@@ -33,6 +33,7 @@ Clone the repository and navigate to the project directory.
 ```bash
 git clone https://github.com/LaxmanZ/laundry-app-react-native.git
 ```
+navigate to project folder
 
 ```bash
 cd laundry-app-react-native
