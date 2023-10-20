@@ -4,16 +4,50 @@ import {
   KeyboardAvoidingView,
   Pressable,
   TextInput,
+  Alert,
 } from 'react-native';
 import React, { useState } from 'react';
-import { MaterialCommunityIcons,Ionicons,Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../firebase.js';
+import { doc, setDoc } from 'firebase/firestore';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const navigation = useNavigation();
+
+  const handleRegister = () => {
+    if (email === '' || password === '' || phone === '') {
+      Alert.alert(
+        'Invalid Details',
+        'Please fill all the details',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ],
+        { cancelable: false }
+      );
+    }
+    createUserWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
+        console.log('user credential', userCredential);
+        const user = userCredential._tokenResponse.email;
+        const myUserUid = auth.currentUser.uid;
+
+        setDoc(doc(db, 'users', `${myUserUid}`), {
+          email: user,
+          phone: phone,
+        });
+      }
+    );
+  };
   return (
     <View
       style={{
@@ -110,6 +144,7 @@ const RegisterScreen = () => {
               marginLeft: 'auto',
               marginRight: 'auto',
             }}
+            onPress={handleRegister}
           >
             <Text style={{ fontSize: 19, color: 'white', textAlign: 'center' }}>
               Register
